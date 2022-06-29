@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/small-business.css' %}" rel="stylesheet">
+
+  <title>ボドゲート</title>
+</head>
+
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand text-success">BoardGate -ボドゲート-</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">{{ request.user.username }}さん、こんにちは</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'bgame:welcome' %}">トップページ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'bgame:list' %}">ボードゲーム一覧</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'bgame:create' %}">ボードゲームを投稿</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://127.0.0.1:8000/admin">管理画面へ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'bgame:logout' %}">ログアウト</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+{% block content %}
+{% endblock content %}
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

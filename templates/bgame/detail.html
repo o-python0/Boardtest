@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+<div class="row my-3">
+    <div class="col-lg-12 text-center">
+        <h1>{{ object.title }}</h1>
+    </div>
+    <div class="col-lg-7">
+        {% if object.image %}
+            <img src="{{ object.image.url }}" width="640" class="img-fluid rounded border">
+        {% else %}
+            <img src="{% static 'images/noimage.png' %}" width="640" class="img-fluid rounded border">
+        {% endif %}
+    </div>
+    <div class="col-lg-5">
+        <h3>概要</h3>
+        <p>{{ object.content }}</p>
+        <p>今、{{ object.want_play }}人の方がこのゲームを遊びたがっています！
+        </p>
+        
+        <p>{{ object.interest }}人の方がこのゲームに興味を持っています！</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h3>このボードゲームのおすすめポイント</h3>
+        <p>{{ object.description }}</p>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        <p class="text-muted">重さ：{{ object.weight }}</p>
+    </div>
+</div>
+
+<hr>
+<div class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-info" href="{% url 'bgame:update' object.pk %}">編集</a>
+        <a class="btn btn-danger" href="{% url 'bgame:delete' object.pk %}">削除</a>
+        <p>
+            <a class="btn btn-outline-primary" href="{% url 'bgame:wantplay' object.pk %}">遊んでみたい！</a>
+            <a class="btn btn-outline-warning" href="{% url 'bgame:interest' object.pk %}">興味あり！</a>
+        </p>
+    </div>
+</div>
+
+<hr>
+<!-- コメントエリア -->
+<div class="row">
+    <div class="col">
+        <h3>-----コメント-----</h3>
+        <ul class="list-unstyled">
+            {% for comment in object.comment_set.all %}
+                <li class="border-bottom mt-2">
+                    ({{ comment.user }}さん): {{ comment.content }} -- ({{ comment.created }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col">
+        <form method="POST" action="{% url 'bgame:comment' %}">{% csrf_token %}
+            {{ CommentForm|crispy }}
+            <button type="submit" class="btn btn-primary">送信</button>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="my-5">
+    <div class="row">
+        <div class="col">
+            <form method="post">{% csrf_token %}
+
+                <h2>{{ object.title }}</h2>
+                <div class="col-7">
+                    {% if object.image %}
+                        <img src="{{ object.image.url }}" width="300" class="img-fluid rounded border">
+                    {% else %}
+                        <img src="{% static 'images/noimage.png' %}" width="640" class="img-fluid rounded border">
+                    {% endif %}
+                </div>
+                <p class="bg-danger text-white p-3">
+                    本当に削除してもよろしいですか？
+                </p>
+
+                <button type="submit" class="btn btn-danger">削除</button>
+                <a href="{% url 'bgame:detail' object.pk %}" class="btn btn-secondary">キャンセル</a>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

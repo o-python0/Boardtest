@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="text-center mt-3">
+    <h3>興味のあるボードゲームを探して、遊んでみたいボタンを押してみましょう！</h3>
+</div>
+
+
+{% for item in object_list %}
+
+<div class="media">
+    {% if item.image %}
+        <img src="{{ item.image.url }}"
+            class="align-self-center mr-3" alt="..." width="120">
+    {% else %}
+        <img src="{% static 'images/noimage.png' %}"
+            class="align-self-center mr-3" alt="..." width="120">
+    {% endif %}
+    <div class="media-body">
+        <h5 class="mt-0"><a href="{% url 'bgame:detail' item.pk %}">{{ item.title }}</a></h5>
+        <p class="mt-0">{{ item.content }}</p>
+        <p class="mt-0">このゲームの重さ：{{ item.weight }}</p>
+    </div>
+</div>
+
+{% if not forloop.last %}
+    <hr>
+{% endif %}
+
+{% endfor %}
+
+{% endblock content %}
