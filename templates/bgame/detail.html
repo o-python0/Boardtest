@@ -20,7 +20,7 @@
     <div class="col-lg-5">
         <h3>概要</h3>
         <p>{{ object.content }}</p>
-        <p>今、{{ object.want_play }}人の方がこのゲームを遊びたがっています！
+        <p>今、{{ want_play }}人の方がこのゲームを遊びたがっています！
         </p>
         
         <p>{{ object.interest }}人の方がこのゲームに興味を持っています！</p>
@@ -45,7 +45,11 @@
         <a class="btn btn-info" href="{% url 'bgame:update' object.pk %}">編集</a>
         <a class="btn btn-danger" href="{% url 'bgame:delete' object.pk %}">削除</a>
         <p>
-            <a class="btn btn-outline-primary" href="{% url 'bgame:wantplay' object.pk %}">遊んでみたい！</a>
+            <form action="{% url 'bgame:wantplay' object.pk %}">
+                {{ form }}
+                <button class="btn btn-outline-primary" type="submit">遊んでみたい！</button>
+            </form>
+
             <a class="btn btn-outline-warning" href="{% url 'bgame:interest' object.pk %}">興味あり！</a>
         </p>
     </div>

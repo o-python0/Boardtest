@@ -10,17 +10,6 @@ WEIGHT = (
 )
 
 
-class User(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    name = models.CharField(verbose_name="名前", max_length=50)
-
-    class Meta:
-        verbose_name = "ユーザー"
-        verbose_name_plural = "ユーザー"
-
-    def __str__(self):
-        return self.name
-
 
 class Bgame(models.Model):
     title = models.CharField(verbose_name="タイトル", max_length=50)
@@ -43,12 +32,19 @@ class Bgame(models.Model):
 
 class WantPlay(models.Model):
     bgame = models.ForeignKey(Bgame, models.DO_NOTHING)
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.CASCADE)
 
 
     class Meta:
         verbose_name = "遊んでみたい"
         verbose_name_plural = "遊んでみたい"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["bgame", "user"],
+                name="wantplay_unique"
+            ),
+        ]
 
     def __str__(self):
         return self.bgame.title

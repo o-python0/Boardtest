@@ -128,3 +128,18 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 LOGIN_REDIRECT_URL = "bgame:list"
+
+
+
+#sendgrid設定
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+
+EMAIL_HOST_USER = '	sgnr88i1@kke.com'
+
+EMAIL_HOST_PASSWORD = 'Yutosendgrid4869'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+

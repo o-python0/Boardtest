@@ -51,8 +51,11 @@ class ListView(ListView):
 # 詳細表示
 def detailfunc(request, pk):
     object = Bgame.objects.get(pk=pk)
+    wantplay_num = object.want_play.count()
     
-    return render(request, 'bgame/detail.html', {"object": object})
+    form = WantPlayForm()
+    
+    return render(request, 'bgame/detail.html', {"object": object, "want_play": wantplay_num ,"form": form})
 
 
 
@@ -143,9 +146,15 @@ def wantplayfunc(request, pk):
     user = request.user
     data = {"bgame": bgame, "user": user}
 
+    print("マッチング数:" + str(bgame.want_play.count()))
+
     form = WantPlayForm(data=data)
     if form.is_valid():
         form.save()
+
+
+    if bgame.min_play == bgame.want_play.count():
+        print("マッチング")
    
     return redirect("bgame:detail", pk=pk)
 

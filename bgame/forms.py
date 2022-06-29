@@ -25,8 +25,9 @@ class WantPlayForm(forms.ModelForm):
 
     class Meta:
         model = WantPlay
-        fields = ("user",)
+        fields = ("user", "bgame")
 
         widgets = {
-            "user": forms.HiddenInput()
+            "user": forms.HiddenInput(),
+            "bgame": forms.HiddenInput()
         }
