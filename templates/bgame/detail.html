@@ -14,14 +14,16 @@
         {% if object.image %}
             <img src="{{ object.image.url }}" width="640" class="img-fluid rounded border">
         {% else %}
-            <img src="{% static 'images/noimage.png' %}" width="640" class="img-fluid rounded border">
+            <img src="{% static 'noimage.png' %}" width="640" class="img-fluid rounded border">
         {% endif %}
     </div>
     <div class="col-lg-5">
-        <h3>概要</h3>
+        <h3>ゲーム概要</h3>
         <p>{{ object.content }}</p>
-        <p>今、{{ want_play }}人の方がこのゲームを遊びたがっています！
-        </p>
+
+        <div class="alert alert-primary" role="alert">
+            今、{{ want_play }}人の方がこのゲームを遊びたがっています！
+        </div>
         
         <p>{{ object.interest }}人の方がこのゲームに興味を持っています！</p>
     </div>
@@ -46,11 +48,14 @@
         <a class="btn btn-danger" href="{% url 'bgame:delete' object.pk %}">削除</a>
         <p>
             <form action="{% url 'bgame:wantplay' object.pk %}">
-                {{ form }}
+                {{ Wform }}
                 <button class="btn btn-outline-primary" type="submit">遊んでみたい！</button>
             </form>
 
-            <a class="btn btn-outline-warning" href="{% url 'bgame:interest' object.pk %}">興味あり！</a>
+            <form action="{% url 'bgame:interest' object.pk %}">
+                {{ Iform }}
+                <button class="btn btn-outline-warning" type="submit">興味あり！</button>
+            </form>
         </p>
     </div>
 </div>
@@ -74,8 +79,8 @@
 
 <div class="row">
     <div class="col">
-        <form method="POST" action="{% url 'bgame:comment' %}">{% csrf_token %}
-            {{ CommentForm|crispy }}
+        <form method="POST" action="{% url 'bgame:comment' object.pk %}">{% csrf_token %}
+            {{ Cform|crispy }}
             <button type="submit" class="btn btn-primary">送信</button>
         </form>
     </div>

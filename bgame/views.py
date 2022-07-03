@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView, CreateView, DeleteView
 
-from .models import Bgame
+from .models import Bgame, WantPlay
 from django.contrib.auth.models import User
 
-from .forms import CommentForm, WantPlayForm
+from .forms import CommentForm, InterestForm, WantPlayForm
 
 
 
@@ -53,9 +53,12 @@ def detailfunc(request, pk):
     object = Bgame.objects.get(pk=pk)
     wantplay_num = object.want_play.count()
     
-    form = WantPlayForm()
+    Wform = WantPlayForm()
+    Iform = InterestForm()
+    Cform = CommentForm()
     
-    return render(request, 'bgame/detail.html', {"object": object, "want_play": wantplay_num ,"form": form})
+    return render(request, 'bgame/detail.html', {"object": object, "want_play": wantplay_num , \
+                                                "Wform": Wform, "Iform": Iform, "Cform": Cform})
 
 
 
@@ -125,10 +128,12 @@ def logoutfunc(request):
 
 
 # コメント作成
-def comment_create(request):
-    bgame = request.POST.get("bgame")
+def comment_create(request, pk):
+    bgame = Bgame.objects.get(pk=pk)
     content = request.POST.get("content")
     user = request.user
+
+    print(bgame)
 
     data = {"bgame": bgame, "content": content, "user": user}
 
@@ -136,7 +141,7 @@ def comment_create(request):
     if form.is_valid():
         form.save()
 
-    return redirect("bgame:detail", pk=bgame)
+    return redirect("bgame:detail", pk=pk)
 
 
 
@@ -144,17 +149,25 @@ def comment_create(request):
 def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
-    data = {"bgame": bgame, "user": user}
 
     print("マッチング数:" + str(bgame.want_play.count()))
 
-    form = WantPlayForm(data=data)
-    if form.is_valid():
-        form.save()
+    try:
+        WantPlay.objects.create(bgame=bgame, user=user)
+    except IntegrityError:
+        pass
 
 
-    if bgame.min_play == bgame.want_play.count():
-        print("マッチング")
+    # form = WantPlayForm(data=data)
+    # if form.is_valid():
+    #     form.save()
+
+
+    # if bgame.min_play <= bgame.want_play.count():
+    #     print("マッチング")
+    #     for obj in want_play:
+    #         print(obj.want_play)
+        
    
     return redirect("bgame:detail", pk=pk)
 
@@ -162,7 +175,8 @@ def wantplayfunc(request, pk):
 
 # 興味あり機能
 def interestfunc(request, pk):
-    object = Bgame.objects.get(pk=pk)
-    object.interest += 1
-    object.save()
+    bgame = Bgame.objects.get(pk=pk)
+    
+    print(bgame)
+
     return redirect("bgame:detail", pk=pk)

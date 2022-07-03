@@ -19,5 +19,5 @@ urlpatterns = [
     path('logout/', logoutfunc, name='logout'),
 
     #コメント作成
-    path('comment/', comment_create, name='comment'),
+    path('comment/<int:pk>', comment_create, name='comment'),
 ]

@@ -143,3 +143,24 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
+
+import environ
+
+env = environ.Env()
+env.read_env('.env')
+
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG')
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_SANDBOX_MODE_IN_DEBUG= False #DEBUG modeがTrueの場合にサンドボックスモードを起動/停止する設定。
+DEFAULT_FROM_EMAIL = 'yuto.spiderman@gmail.com'
+
+
+
+
+
+

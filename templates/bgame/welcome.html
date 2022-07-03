@@ -11,7 +11,7 @@
             <img class="img-fluid rounded-circle mb-4 mb-lg-0" src="{{ top_object.image.url }}" alt="">
             <h2 class="text-center">{{ top_object.title }}</h2>
         {% else %}
-            <img class="img-fluid rounded mb-4 mb-lg-0" src="{% static 'media/noimage.png' %}" alt="">
+            <img class="img-fluid rounded mb-4 mb-lg-0" src="{% static 'noimage.png' %}" alt="">
         {% endif %}
     </div>
 
@@ -49,7 +49,7 @@
         {% if item.image %}
             <img class="card-img-top" src="{{ item.image.url }}" alt="{{ item.title }}"/>
         {% else %}
-            <img class="card-img-top" src="{% static 'media/noimage.png' %}" alt="{{ item.title }}"/>
+            <img class="card-img-top" src="{% static 'noimage.png' %}" alt="{{ item.title }}"/>
         {% endif %}
         <div class="card-body">
             <h2 class="card-title">{{ item.title }}</h2>

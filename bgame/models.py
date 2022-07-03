@@ -30,9 +30,11 @@ class Bgame(models.Model):
         return self.title
 
 
+
 class WantPlay(models.Model):
-    bgame = models.ForeignKey(Bgame, models.DO_NOTHING)
+    bgame = models.ForeignKey(Bgame, models.CASCADE)
     user = models.ForeignKey(User, models.CASCADE)
+    is_match = models.BooleanField(default=False)
 
 
     class Meta:
@@ -43,6 +45,28 @@ class WantPlay(models.Model):
             models.UniqueConstraint(
                 fields=["bgame", "user"],
                 name="wantplay_unique"
+            ),
+        ]
+
+    def __str__(self):
+        return self.bgame.title
+
+
+
+
+class Interest(models.Model):
+    bgame = models.ForeignKey(Bgame, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
+
+
+    class Meta:
+        verbose_name = "興味あり"
+        verbose_name_plural = "興味あり"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["bgame", "user"],
+                name="interest_unique"
             ),
         ]
 

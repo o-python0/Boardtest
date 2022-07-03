@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Comment, WantPlay
+from .models import Comment, WantPlay, Interest
 
 
 class CommentForm(forms.ModelForm):
@@ -25,6 +25,20 @@ class WantPlayForm(forms.ModelForm):
 
     class Meta:
         model = WantPlay
+        fields = ("user", "bgame")
+
+        widgets = {
+            "user": forms.HiddenInput(),
+            "bgame": forms.HiddenInput()
+        }
+
+
+
+
+class InterestForm(forms.ModelForm):
+
+    class Meta:
+        model = Interest
         fields = ("user", "bgame")
 
         widgets = {
