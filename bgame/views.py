@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView, CreateView, DeleteView
 
@@ -33,6 +34,16 @@ class ListView(ListView):
     model = Bgame
 
 
+    def get_queryset(self):
+        qs = Bgame.objects.all()
+        keyword = self.request.GET.get("q")
+
+        if keyword:
+            qs = qs.filter(title__contains=keyword)
+
+        return qs
+
+
 
 # # 詳細表示
 # class DetailView(DetailView):
@@ -53,9 +64,9 @@ def detailfunc(request, pk):
     object = Bgame.objects.get(pk=pk)
     wantplay_num = object.want_play.count()
     
-    Wform = WantPlayForm()
-    Iform = InterestForm()
-    Cform = CommentForm()
+    Wform = WantPlayForm() #遊びたいフォーム
+    Iform = InterestForm() #興味ありフォーム
+    Cform = CommentForm() #コメントフォーム
     
     return render(request, 'bgame/detail.html', {"object": object, "want_play": wantplay_num , \
                                                 "Wform": Wform, "Iform": Iform, "Cform": Cform})
@@ -81,12 +92,29 @@ class UpdateView(UpdateView):
         pk = self.kwargs.get("pk")
         return reverse("bgame:detail", kwargs={"pk": pk})
 
+    def form_valid(self, form):
+        messages.success(self.request, "更新しました")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "更新できませんでした")
+        return super().form_invalid(form)
+
+
 
 # 削除機能
 class DeleteView(DeleteView):
     template_name = 'bgame/delete.html'
     model = Bgame
     success_url = reverse_lazy("bgame:list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "削除しました")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "削除できませんでした")
+        return super().form_invalid(form)
 
 
 # サインアップ
@@ -96,10 +124,12 @@ def signupfunc(request):
         password = request.POST['password']
 
         try:
-            user = User.objects.create_user(username, '', password)
-            return render(request, 'bgame/welcome.html')
+            User.objects.create_user(username, '', password)
+            messages.success(request, "アカウントが正常に作成されました。")
+            return redirect('bgame:welcome')
         except IntegrityError:
-            return render(request, 'bgame/signup.html', {'error': 'このアカウント名は既に使用されています。'})
+            messages.error(request, "このアカウント名は既に使用されています。")
+            return render(request, 'bgame/signup.html')
     
     return render(request, 'bgame/signup.html')
 
@@ -115,7 +145,9 @@ def loginfunc(request):
             login(request, user)
             return redirect('bgame:list')
         else:
-            return render(request, 'bgame/welcome.html', {'message': 'ログインできませんでした'})
+            messages.error(request, "ログインできませんでした。ユーザー名かパスワードが間違っている可能性があります。")
+            return redirect('bgame:welcome')
+
 
     return render(request, 'bgame/welcome.html')
 
@@ -150,6 +182,7 @@ def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
 
+
     print("マッチング数:" + str(bgame.want_play.count()))
 
     try:
@@ -158,15 +191,18 @@ def wantplayfunc(request, pk):
         pass
 
 
-    # form = WantPlayForm(data=data)
-    # if form.is_valid():
-    #     form.save()
-
 
     # if bgame.min_play <= bgame.want_play.count():
     #     print("マッチング")
     #     for obj in want_play:
     #         print(obj.want_play)
+
+    # #マッチングユーザーのis_matchをTrueに変更
+    # target_list = bgame.wantplay_set.filter(is_match=False)
+    # for target in target_list:
+    #     target.is_match = True
+    #     target.save()
+
         
    
     return redirect("bgame:detail", pk=pk)

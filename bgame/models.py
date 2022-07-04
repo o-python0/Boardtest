@@ -17,7 +17,7 @@ class Bgame(models.Model):
     descrption = models.TextField(verbose_name="説明", blank=True, default="")
     weight = models.CharField(verbose_name="重さ", max_length=50, choices=WEIGHT, null=True, blank=True)
     
-    want_play = models.ManyToManyField(User, through="WantPlay", through_fields=("bgame", "user"))
+    want_play = models.ManyToManyField(User, through="WantPlay", through_fields=("bgame", "user"), related_name="want_play")
 
     image = models.ImageField(verbose_name="画像", blank=True, null=True, default=None)
     min_play = models.IntegerField(verbose_name="最低プレイ人数", default=2)

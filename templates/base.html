@@ -28,7 +28,13 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">{{ request.user.username }}さん、こんにちは</a>
+          <a class="nav-link" href="#">
+            {% if request.user.is_authenticated %}
+            ようこそ、{{ request.user.username }}さん
+            {% else %}
+            ログインしてください
+            {% endif %}
+          </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'bgame:welcome' %}">トップページ</a>
@@ -39,17 +45,33 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'bgame:create' %}">ボードゲームを投稿</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="http://127.0.0.1:8000/admin">管理画面へ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'bgame:logout' %}">ログアウト</a>
+      </ul>
+      
+      <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="{% url 'bgame:list' %}">一覧ページ</a>
+                <a class="nav-link" href="http://127.0.0.1:8000/admin">管理画面へ</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'bgame:logout' %}">ログアウト</a>
+            </div>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
+{% if messages %}
+  {% for message in messages %}
+  <div {% if message.tags %} class="my-3 alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"{% endif %} role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+{% endif %}
 
 
 {% block content %}
@@ -60,6 +82,8 @@
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
+<!-- fontawesome -->
+<script src="https://kit.fontawesome.com/58838839f5.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
