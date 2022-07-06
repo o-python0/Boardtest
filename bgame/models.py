@@ -34,7 +34,7 @@ class Bgame(models.Model):
 
 class WantPlay(models.Model):
     bgame = models.ForeignKey(Bgame, models.CASCADE, related_name="wantplay_bgame")
-    user = models.ForeignKey(User, models.CASCADE, related_name="wantplay_interest")
+    user = models.ForeignKey(User, models.CASCADE, related_name="wantplay_user")
     is_match = models.BooleanField(default=False)
 
 

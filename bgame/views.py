@@ -182,18 +182,21 @@ def wantplayfunc(request, pk):
 
     try:
         WantPlay.objects.create(bgame=bgame, user=user)
+        messages.success(request, "このゲームにマッチング希望をしました。")
     except IntegrityError:
+        messages.error(request, "既にマッチング希望をしています。")
         pass
 
 
     # マッチング処理
-    match_list = bgame.wantplays.filter(is_match=False)
-    if bgame.min_play == match_list.count():
-        print("マッチング")
-        for target in match_list:
-            print("メール送信：" + str(target.user.email))
-            target.is_match = True
-            target.save()
+    match_list = bgame.wantplay_bgame.filter(is_match=False)
+    print(match_list)
+    # if bgame.min_play == match_list.count():
+    #     print("マッチング")
+    #     for target in match_list:
+    #         print("メール送信：" + str(target.user.email))
+    #         target.is_match = True
+    #         target.save()
 
     return redirect("bgame:detail", pk=pk)
 

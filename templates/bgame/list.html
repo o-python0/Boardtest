@@ -7,6 +7,28 @@
     <h3>興味のあるボードゲームを探して、遊んでみたいボタンを押してみましょう！</h3>
 </div>
 
+<div class="accordion" id="collapse-accordion">
+    <div class="card col-4">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-accordion-1" aria-expanded="true" aria-controls="collapse-accordion-1">
+            ゲームの重さとは？
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapse-accordion-1" class="collapse" aria-labelledby="headingOne" data-parent="#collapse-accordion">
+        <div class="card-body">
+          重量とは、主にゲームのプレイ時間を表します。<br>
+          目安としては、
+          <strong>軽量級</strong>：15～30分
+          <strong>中量級</strong>：30分～90分
+          <strong>重量級</strong>：90分～
+          となっています
+        </div>
+      </div>
+    </div>
+</div>
 
 {% for item in object_list %}
 
