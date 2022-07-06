@@ -22,10 +22,13 @@
         <p>{{ object.content }}</p>
 
         <div class="alert alert-primary" role="alert">
-            今、{{ want_play }}人の方がこのゲームを遊びたがっています！
+            今、{{ object.want_play.count }}人の方がこのゲームを遊びたがっています！
         </div>
         
-        <p>{{ object.interest }}人の方がこのゲームに興味を持っています！</p>
+        <div class="alert alert-warning" role="alert">
+            今、{{ object.interest.count }}人の方がこのゲームに興味を持っています！
+        </div>
+        
     </div>
 </div>
 <div class="row">

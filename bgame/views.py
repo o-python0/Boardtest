@@ -62,14 +62,12 @@ class ListView(ListView):
 # 詳細表示
 def detailfunc(request, pk):
     object = Bgame.objects.get(pk=pk)
-    wantplay_num = object.want_play.count()
     
     Wform = WantPlayForm() #遊びたいフォーム
     Iform = InterestForm() #興味ありフォーム
     Cform = CommentForm() #コメントフォーム
     
-    return render(request, 'bgame/detail.html', {"object": object, "want_play": wantplay_num , \
-                                                "Wform": Wform, "Iform": Iform, "Cform": Cform})
+    return render(request, 'bgame/detail.html', {"object": object, "Wform": Wform, "Iform": Iform, "Cform": Cform})
 
 
 

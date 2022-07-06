@@ -17,7 +17,8 @@ class Bgame(models.Model):
     descrption = models.TextField(verbose_name="説明", blank=True, default="")
     weight = models.CharField(verbose_name="重さ", max_length=50, choices=WEIGHT, null=True, blank=True)
     
-    want_play = models.ManyToManyField(User, through="WantPlay", through_fields=("bgame", "user"))
+    want_play = models.ManyToManyField(User, through="WantPlay", through_fields=("bgame", "user"), related_name="wantplays")
+    interest = models.ManyToManyField(User, through="Interest", through_fields=("bgame", "user"), related_name="interests")
 
     image = models.ImageField(verbose_name="画像", blank=True, null=True, default=None)
     min_play = models.IntegerField(verbose_name="最低プレイ人数", default=2)
@@ -32,8 +33,8 @@ class Bgame(models.Model):
 
 
 class WantPlay(models.Model):
-    bgame = models.ForeignKey(Bgame, models.CASCADE, related_name="wantplays")
-    user = models.ForeignKey(User, models.CASCADE, related_name="wantplays")
+    bgame = models.ForeignKey(Bgame, models.CASCADE, related_name="wantplay_bgame")
+    user = models.ForeignKey(User, models.CASCADE, related_name="wantplay_interest")
     is_match = models.BooleanField(default=False)
 
 
@@ -53,10 +54,9 @@ class WantPlay(models.Model):
 
 
 
-
 class Interest(models.Model):
-    bgame = models.ForeignKey(Bgame, models.CASCADE)
-    user = models.ForeignKey(User, models.CASCADE)
+    bgame = models.ForeignKey(Bgame, models.CASCADE, related_name="interest_bgame")
+    user = models.ForeignKey(User, models.CASCADE, related_name="interest_user")
 
 
     class Meta:
