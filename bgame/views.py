@@ -179,9 +179,10 @@ def comment_create(request, pk):
 def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
+        
+        
 
-
-    if bgame.wantplay_bgame.filter(is_match=True, user=user):
+    if not bgame.wantplay_bgame.filter(is_match=False, user=user):
         try:
             WantPlay.objects.create(bgame=bgame, user=user)
             messages.success(request, "このゲームにマッチング希望をしました。")
