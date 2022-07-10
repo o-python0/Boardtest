@@ -20,15 +20,6 @@
     <div class="col-lg-5 bg-success">
         <h3><strong>ゲーム概要</strong></h3>
         <p>{{ object.content }}</p>
-
-        <div class="alert alert-primary" role="alert">
-            今、{{ object.want_play.count }}人の方がこのゲームを遊びたがっています！
-        </div>
-        
-        <div class="alert alert-warning" role="alert">
-            今、{{ object.interest.count }}人の方がこのゲームに興味を持っています！
-        </div>
-        
     </div>
 </div>
 <div class="row">
@@ -39,9 +30,19 @@
 </div>
 <hr>
 <div class="row">
-    <div class="col">
+    <div class="col-3">
         <p class="text-muted">重さ：{{ object.weight }}</p>
     </div>
+    <div class="col-7">
+        <div class="alert alert-primary" role="alert">
+            現在、{{ object.want_play.count }}人の方がこのゲームを遊びたがっています！
+        </div>
+       
+        <div class="alert alert-warning" role="alert">
+            現在、{{ object.interest.count }}人の方がこのゲームに興味を持っています！
+        </div>
+    </div>
+
 </div>
 
 <hr>

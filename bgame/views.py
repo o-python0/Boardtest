@@ -180,12 +180,15 @@ def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
 
-    try:
-        WantPlay.objects.create(bgame=bgame, user=user)
-        messages.success(request, "このゲームにマッチング希望をしました。")
-    except IntegrityError:
+
+    if bgame.wantplay_bgame.filter(is_match=True, user=user):
+        try:
+            WantPlay.objects.create(bgame=bgame, user=user)
+            messages.success(request, "このゲームにマッチング希望をしました。")
+        except IntegrityError:
+            pass
+    else:
         messages.error(request, "既にマッチング希望をしています。")
-        pass
 
 
     # マッチング処理

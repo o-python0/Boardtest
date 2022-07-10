@@ -42,13 +42,6 @@ class WantPlay(models.Model):
         verbose_name = "遊んでみたい"
         verbose_name_plural = "遊んでみたい"
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=["bgame", "user"],
-                name="wantplay_unique"
-            ),
-        ]
-
     def __str__(self):
         return self.bgame.title
 
