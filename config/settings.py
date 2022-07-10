@@ -129,6 +129,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = "bgame:list"
 
+LOGIN_URL = "bgame:welcome"
+
 
 
 #sendgrid設定

@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView, CreateView, DeleteView
 
-from .models import Bgame, WantPlay
+from .models import Bgame, Interest, WantPlay
 from django.contrib.auth.models import User
 
 from .forms import CommentForm, InterestForm, WantPlayForm
@@ -180,8 +180,7 @@ def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
         
-        
-
+    
     if not bgame.wantplay_bgame.filter(is_match=False, user=user):
         try:
             WantPlay.objects.create(bgame=bgame, user=user)
@@ -209,7 +208,13 @@ def wantplayfunc(request, pk):
 # 興味あり機能
 def interestfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
+    user = request.user
     
-    print(bgame)
+    try:
+        Interest.objects.create(bgame=bgame, user=user)
+        messages.success(request, "このゲームに興味ありをしました。")
+    except IntegrityError:
+        messages.error(request, "既に興味ありをしています。")
+        pass
 
     return redirect("bgame:detail", pk=pk)
