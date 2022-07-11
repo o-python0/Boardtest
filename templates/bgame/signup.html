@@ -12,6 +12,8 @@
 <form action="" method="POST">{% csrf_token %}
     <div class="form-floating">
         <input type="text" class="form-control" id="floatingInput" placeholder="ユーザー名" name="username">
+        <input type="email" class="form-control" id="floatingInput" placeholder="メールアドレス" name="email">
+        <label for="email">マッチングメールを送信する際に使用します。</label>
         <input type="password" class="form-control" id="floatingPassword" placeholder="パスワード" name="password">
     </div>
 <button class="w-100 btn btn-lg btn-primary" type="submit">登録する</button>

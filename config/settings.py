@@ -158,11 +158,9 @@ DEBUG = env.bool('DEBUG')
 
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_SANDBOX_MODE_IN_DEBUG= False #DEBUG modeがTrueの場合にサンドボックスモードを起動/停止する設定。
+SENDGRID_SANDBOX_MODE_IN_DEBUG= False
 DEFAULT_FROM_EMAIL = 'yuto.spiderman@gmail.com'
-
-
-
+SENDGRID_API_KEY = SECRET_KEY
 
 
 

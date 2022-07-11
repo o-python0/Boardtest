@@ -3,6 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
@@ -114,10 +115,11 @@ class DeleteView(LoginRequiredMixin, DeleteView):
 def signupfunc(request):
     if request.method == "POST":
         username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
         try:
-            User.objects.create_user(username, '', password)
+            User.objects.create_user(username, email, password)
             messages.success(request, "アカウントが正常に作成されました。")
             return redirect('bgame:welcome')
         except IntegrityError:
@@ -195,12 +197,18 @@ def wantplayfunc(request, pk):
     # マッチング処理
     match_list = bgame.wantplay_bgame.filter(is_match=False)
     print(match_list)
-    # if bgame.min_play == match_list.count():
-    #     print("マッチング")
-    #     for target in match_list:
-    #         print("メール送信：" + str(target.user.email))
-    #         target.is_match = True
-    #         target.save()
+    if bgame.min_play == match_list.count():
+        print("マッチング")
+        for target in match_list:
+            print("メール送信：" + str(target.user.email))
+            send_mail(
+            'マッチング通知',
+            'おめでとうございます！\n遊びたい希望をしたゲームがマッチングしました！',
+            'boardgate@example.com',
+            [target.user.email]
+            )
+            target.is_match = True
+            target.save()
 
     return redirect("bgame:detail", pk=pk)
 
