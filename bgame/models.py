@@ -14,7 +14,7 @@ WEIGHT = (
 class Bgame(models.Model):
     title = models.CharField(verbose_name="タイトル", max_length=50)
     content = models.TextField(verbose_name="ゲーム概要")
-    descrption = models.TextField(verbose_name="説明", blank=True, default="")
+    descrption = models.TextField(verbose_name="おすすめポイント", blank=True, default="")
     weight = models.CharField(verbose_name="重さ", max_length=50, choices=WEIGHT, null=True, blank=True)
     
     want_play = models.ManyToManyField(User, through="WantPlay", through_fields=("bgame", "user"), related_name="wantplays")

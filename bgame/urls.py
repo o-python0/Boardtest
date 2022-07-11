@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import IndexView, ListView, DetailView, CreateView, UpdateView, DeleteView, signupfunc, loginfunc, logoutfunc, comment_create, wantplayfunc, interestfunc, detailfunc
+from .views import IndexView, ListView, CreateView, UpdateView, DeleteView, signupfunc, loginfunc, logoutfunc, comment_create, wantplayfunc, interestfunc, detailfunc
 
 app_name = 'bgame'
 

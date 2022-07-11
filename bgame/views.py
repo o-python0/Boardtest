@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from django.views.generic import TemplateView, ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
 
 from .models import Bgame, Interest, WantPlay
 from django.contrib.auth.models import User
@@ -50,20 +50,6 @@ class ListView(LoginRequiredMixin, ListView):
 
 
 
-# # 詳細表示
-# class DetailView(DetailView):
-#     template_name = 'bgame/detail.html'
-#     model = Bgame
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-
-#         context['CommentForm'] = CommentForm(initial={'bgame': self.object})
-#         wantplay_list = self.wantplay_text.split(",")
-#         context['wantplay_list'] = wantplay_list
-  
-#         return context
-
 # 詳細表示
 @login_required
 def detailfunc(request, pk):
@@ -94,7 +80,6 @@ class UpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'bgame/update.html'
     model = Bgame
     fields = ('title', 'content', 'descrption', 'weight', 'image', 'min_play')
-    success_url = reverse_lazy("bgame:list")
 
     def get_success_url(self):
         pk = self.kwargs.get("pk")
@@ -151,6 +136,7 @@ def loginfunc(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, "正常にログインしました。")
             return redirect('bgame:list')
         else:
             messages.error(request, "ログインできませんでした。ユーザー名かパスワードが間違っている可能性があります。")
@@ -164,6 +150,7 @@ def loginfunc(request):
 @login_required
 def logoutfunc(request):
     logout(request)
+    messages.success(request, "ログアウトしました。")
     return redirect('bgame:welcome')
 
 
@@ -181,6 +168,7 @@ def comment_create(request, pk):
 
     form = CommentForm(data=data)
     if form.is_valid():
+        messages.success(request, "コメントを投稿しました。")
         form.save()
 
     return redirect("bgame:detail", pk=pk)
