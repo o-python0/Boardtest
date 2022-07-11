@@ -3,6 +3,8 @@ from django.urls import reverse, reverse_lazy
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView, CreateView, DeleteView
 
@@ -12,6 +14,9 @@ from django.contrib.auth.models import User
 from .forms import CommentForm, InterestForm, WantPlayForm
 
 
+#アクセス制限用ミックスイン
+class LoginRequiredMixin(LoginRequiredMixin):
+    login_url = reverse_lazy('bgame:welcome')
 
 
 #ウェルカムページ
@@ -29,7 +34,7 @@ class IndexView(TemplateView):
 
 
 # 一覧表示
-class ListView(ListView):
+class ListView(LoginRequiredMixin, ListView):
     template_name = 'bgame/list.html'
     model = Bgame
 
@@ -60,30 +65,35 @@ class ListView(ListView):
 #         return context
 
 # 詳細表示
+@login_required
 def detailfunc(request, pk):
-    object = Bgame.objects.get(pk=pk)
+    bgame = Bgame.objects.get(pk=pk)
+
+    wantplay_list = bgame.wantplay_bgame.filter(is_match=False)
+    interest_list = bgame.interest_bgame.filter
     
     Wform = WantPlayForm() #遊びたいフォーム
     Iform = InterestForm() #興味ありフォーム
     Cform = CommentForm() #コメントフォーム
     
-    return render(request, 'bgame/detail.html', {"object": object, "Wform": Wform, "Iform": Iform, "Cform": Cform})
+    return render(request, 'bgame/detail.html', {"object": bgame, "wantplay_list": wantplay_list, "interest_list": interest_list,\
+                                                 "Wform": Wform, "Iform": Iform, "Cform": Cform})
 
 
 
 # 作成機能
-class CreateView(CreateView):
+class CreateView(LoginRequiredMixin, CreateView):
     template_name = 'bgame/create.html'
     model = Bgame
-    fields = ('title', 'content', 'descrption', 'weight', 'image')
+    fields = ('title', 'content', 'descrption', 'weight', 'image', 'min_play')
     success_url = reverse_lazy("bgame:list")
 
 
 # 更新機能
-class UpdateView(UpdateView):
+class UpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'bgame/update.html'
     model = Bgame
-    fields = ('title', 'content', 'descrption', 'weight', 'image')
+    fields = ('title', 'content', 'descrption', 'weight', 'image', 'min_play')
     success_url = reverse_lazy("bgame:list")
 
     def get_success_url(self):
@@ -101,7 +111,7 @@ class UpdateView(UpdateView):
 
 
 # 削除機能
-class DeleteView(DeleteView):
+class DeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'bgame/delete.html'
     model = Bgame
     success_url = reverse_lazy("bgame:list")
@@ -151,6 +161,7 @@ def loginfunc(request):
 
 
 # ログアウト
+@login_required
 def logoutfunc(request):
     logout(request)
     return redirect('bgame:welcome')
@@ -158,6 +169,7 @@ def logoutfunc(request):
 
 
 # コメント作成
+@login_required
 def comment_create(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     content = request.POST.get("content")
@@ -176,6 +188,7 @@ def comment_create(request, pk):
 
 
 # 遊んでみたい機能
+@login_required
 def wantplayfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
@@ -206,6 +219,7 @@ def wantplayfunc(request, pk):
 
 
 # 興味あり機能
+@login_required
 def interestfunc(request, pk):
     bgame = Bgame.objects.get(pk=pk)
     user = request.user
@@ -218,3 +232,5 @@ def interestfunc(request, pk):
         pass
 
     return redirect("bgame:detail", pk=pk)
+
+
